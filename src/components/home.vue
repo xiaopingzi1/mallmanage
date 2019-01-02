@@ -12,7 +12,7 @@
         </el-col>
         <el-col :span="1">
           <div class="grid-content bg-purple">
-            <a href="" class="loginout">退出</a>
+            <a href="" class="loginout" @click.prevent="handleLoginOut">退出</a>
           </div>
         </el-col>
       </el-row>
@@ -21,7 +21,9 @@
       <el-aside width="200px" class="aside">
         <!-- 导航 -->
         <el-menu default-active="2"
-        :unique-opened="true">
+        :unique-opened="true"
+        router
+        >
         <!-- 加：提取的是字符串的值 -->
           <!-- 1 -->
           <el-submenu index="1">
@@ -30,7 +32,7 @@
               <span>用户管理</span>
             </template>
 
-            <el-menu-item index="1-1">
+            <el-menu-item index="users">
               <i class="el-icon-location"></i>
               用户列表
             </el-menu-item>
@@ -99,14 +101,38 @@
         </el-menu>
 
       </el-aside>
-      <el-main class="main"></el-main>
+      <el-main class="main">
+        <router-view></router-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>
 
 <script>
 export default {
+   // 在组件渲染之前判断用户是否登录
+  beforeCreate() {
+    if (!localStorage.getItem("token")){
+      // 回到登录
+      this.$router.push({
+        name:"login"
+      });
+      this.$message.warning('请先登录');
+    }
+    },
+  methods:{
+    handleLoginOut() {
+      // 清除token
+      localStorage.clear(); 
+      // 回到登录界面
+      this.$router.push({
+        name:"login"
+      });
+      // 退出成功
+      this.$message.success("退出成功");
+    },
 
+  }
 }
 </script>
 
@@ -117,12 +143,6 @@ export default {
 .header {
   background-color:#B3C0D1;
 
-}
-.aside {
-
-}
-.main {
-  background-color: bisque;
 }
 .middle {
   text-align:center;

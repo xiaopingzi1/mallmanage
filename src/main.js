@@ -10,12 +10,17 @@ import Http from './plugins/http'
 import App from './App'
 import router from './router'
 
+import moment from 'moment'
+
 Vue.config.productionTip = false
 Vue.use(ElementUi)
 Vue.use(router)
 Vue.use(Http)
 
-
+// 处理日期格式的全局过滤器
+Vue.filter('fmtDate',function(v) {
+  return moment(v).format('YYYY-MM-DD')
+});
 // axios.defaults.baseURL = "http://localhost:8888/api/private/v1/"
 // Vue.prototype.$http = axios
 
